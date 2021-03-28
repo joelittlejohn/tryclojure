@@ -22,12 +22,10 @@
 (defn make-sandbox []
   (sandbox try-clojure-tester
            :timeout 2000
-           :init '(do (require '[clojure.repl :refer [doc source]])
-                      (future (Thread/sleep 600000)
-                              (-> *ns* .getName remove-ns)))))
+           :init '(require '[clojure.repl :refer [doc source]])))
 
 (defn find-sb [old]
-  (if-let [sb (get old "sb")]
+  (if (get old "sb")
     old
     (assoc old "sb" (make-sandbox))))
 

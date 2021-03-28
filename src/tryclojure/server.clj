@@ -4,6 +4,7 @@
             [noir.util.middleware :as nm]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.defaults :refer [secure-site-defaults site-defaults]]
+            [ring-ttl-session.core :refer [ttl-memory-store]]
             [tryclojure.views.home :as home]
             [tryclojure.views.tutorial :as tutorial]
             [tryclojure.views.eval :as eval]))
@@ -20,11 +21,13 @@
 
 (def app
   (nm/app-handler app-routes :ring-defaults (-> site-defaults
-                                                (assoc-in [:security :anti-forgery] false))))
+                                                (assoc-in [:security :anti-forgery] false)
+                                                (assoc-in [:session :store] (ttl-memory-store 900)))))
 
 (def secure-app
   (nm/app-handler app-routes :ring-defaults (-> secure-site-defaults
                                                 (assoc-in [:security :anti-forgery] false)
+                                                (assoc-in [:session :store] (ttl-memory-store 900))
                                                 (assoc :proxy true))))
 
 (defn -main [port]

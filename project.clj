@@ -4,6 +4,7 @@
                  [lib-noir "0.9.9"]
                  [compojure "1.6.2"]
                  [ring-server "0.5.0"]
+                 [ring-ttl-session "0.3.1"]
                  [commons-lang/commons-lang "2.6"]
                  [clojail "1.0.6"]]
   :jvm-opts ["-Djava.security.policy=example.policy" "-Xmx80M"]

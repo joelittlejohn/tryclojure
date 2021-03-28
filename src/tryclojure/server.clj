@@ -3,7 +3,7 @@
   (:require [compojure.route :as route]
             [noir.util.middleware :as nm]
             [ring.adapter.jetty :as jetty]
-            [ring.middleware.defaults :refer [site-defaults]]
+            [ring.middleware.defaults :refer [secure-site-defaults]]
             [tryclojure.views.home :as home]
             [tryclojure.views.tutorial :as tutorial]
             [tryclojure.views.eval :as eval]))
@@ -19,7 +19,9 @@
    (route/not-found "Not Found")])
 
 (def app
-  (nm/app-handler app-routes :ring-defaults (assoc-in site-defaults [:security :anti-forgery] false)))
+  (nm/app-handler app-routes :ring-defaults (-> secure-site-defaults
+                                                (assoc-in [:security :anti-forgery] false)
+                                                (assoc :proxy true))))
 
 (defn -main [port]
   (jetty/run-jetty app {:port (Long. port) :join? false}))
